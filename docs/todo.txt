@@ -1,0 +1,41 @@
+-Todo list
+
+- Done Install and setup django
+- Done Install and setup Vue
+- Done Include front awesome
+- Done Set up the base template
+- done create django app and models for products
+- done create serializer and views for the products
+- Done create simple front page (latest products)
+- Done view a product
+    - create viewset in django
+    - create vue page for showing product
+    - add link to detail page 
+
+- Done sette opp vuex / state 
+- make it posible to add to cart 
+    - Done add functionality to vuex
+    - Done Initialize store in app.vuex
+    - Done add button to product page
+    - Done show a toast message
+- Done Implement a loading bar
+- Done set document title
+- Make it posible to view a category
+    - Done convert the product to a component
+- Done Add search functionility
+- View Cart 
+    - Done A cart item should be a component
+- Change contents of cart 
+    - Done Increment/Decrement qty
+    - Done remove from cart
+-done Make it possible to sign up
+-done make it possible to log in
+- done creae a simple my account page
+- show my orders on the my account page
+    - an order should be a component
+- proceed to checkout(auth)
+- Done create  a simple success page 
+- deploy django
+    - create a server and access
+
+2.12"
