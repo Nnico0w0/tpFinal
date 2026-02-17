@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     
     # local apps
+    'users.apps.UsersConfig',
     'products.apps.ProductsConfig',
     'orders.apps.OrdersConfig',
 
@@ -153,6 +154,7 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Stripe
-STRIPE_PUBLISHABLE_KEY = 'pk_test_your_publishable_key_here'
-STRIPE_SECRET_KEY = 'sk_test_your_secret_key_here'
+# Stripe - Test Mode for Development
+STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY', 'pk_test_51QhRcYKv6xvJDgFBXYz')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_51QhRcYKv6xvJDgFBXYz')
+STRIPE_TEST_MODE = True  # Always use test mode for development

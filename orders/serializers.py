@@ -1,17 +1,36 @@
 from rest_framework import serializers
 
-from .models import Order, OrderItem
+from .models import Order, OrderItem, Subscription
 from products.serializers import ProductSerializer
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='order_item.product.name', read_only=True)
+    
+    class Meta:
+        model = Subscription
+        fields = (
+            'id',
+            'product_name',
+            'start_date',
+            'end_date',
+            'status',
+            'domain_name',
+        )
 
 
 class MyOrderItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
+    subscription = SubscriptionSerializer(read_only=True)
+    
     class Meta:
         model = OrderItem
         fields = (
             'price',
             'product',
             'quantity',
+            'billing_cycle_months',
+            'subscription',
         )
 
 class MyOrderSerializer(serializers.ModelSerializer):
@@ -32,6 +51,8 @@ class MyOrderSerializer(serializers.ModelSerializer):
             'stripe_token',
             'items',
             'paid_amount',
+            'status',
+            'created_at',
         )
 
     def create(self, validated_data):
@@ -55,6 +76,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'price',
             'product',
             'quantity',
+            'billing_cycle_months',
         )
 
 
