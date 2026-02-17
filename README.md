@@ -16,33 +16,103 @@ Sistema de e-commerce completo desarrollado con Django REST Framework (backend) 
 
 El sistema incluye 3 APIs públicas accesibles sin autenticación:
 
-- **Usuarios**: `GET /api/v1/public/users/list/` - Lista todos los usuarios registrados
+- **Usuarios**: `GET /api/v1/public/users/` - Lista todos los usuarios registrados
 - **Productos**: `GET /api/v1/products/all/` - Lista todos los productos disponibles
 - **Órdenes**: `GET /api/v1/orders/all/` - Lista todas las órdenes realizadas
 
-## Requisitos del Sistema
+## 🚀 Inicio Rápido con Docker (Recomendado)
 
-### Backend (Django)
-- Python 3.8+
-- pip (gestor de paquetes de Python)
-- SQLite (incluido) o PostgreSQL (producción)
+### Requisitos Previos
+- Docker Desktop instalado y en ejecución
+- Git (para clonar el repositorio)
 
-### Frontend (Vue.js)
-- Node.js 16+
-- npm 7+
+### Pasos para Iniciar el Proyecto
 
-## Instalación y Configuración
-
-### 1. Clonar el repositorio
-
+1. **Clonar el repositorio**
 ```bash
 git clone <url-del-repositorio>
 cd tpFinal
 ```
 
-### 2. Configurar el Backend (Django)
+2. **Ejecutar el script de inicio**
+```bash
+./start-project.sh
+```
 
-#### Instalar dependencias de Python
+El script se encargará de:
+- ✅ Verificar que Docker esté disponible
+- ✅ Construir las imágenes de los contenedores
+- ✅ Iniciar la base de datos PostgreSQL
+- ✅ Iniciar el backend Django
+- ✅ Iniciar el frontend Vue.js
+- ✅ Ejecutar las migraciones
+- ✅ Esperar a que todos los servicios estén listos
+
+3. **Acceder a la aplicación**
+
+Una vez que el script termine, podrás acceder a:
+
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8000
+- **Panel de Administración**: http://localhost:8000/admin
+
+### Endpoints de API Disponibles
+
+```bash
+# Listar usuarios
+curl http://localhost:8000/api/v1/public/users/
+
+# Listar productos
+curl http://localhost:8000/api/v1/products/all/
+
+# Listar órdenes
+curl http://localhost:8000/api/v1/orders/all/
+```
+
+### Comandos Útiles de Docker
+
+```bash
+# Ver los logs en tiempo real
+docker compose logs -f
+
+# Ver logs de un servicio específico
+docker compose logs -f backend
+docker compose logs -f frontend
+docker compose logs -f db
+
+# Detener el proyecto
+docker compose down
+
+# Detener y eliminar los volúmenes (reset completo)
+docker compose down -v
+
+# Reiniciar un servicio
+docker compose restart backend
+
+# Ver el estado de los contenedores
+docker compose ps
+
+# Ejecutar comandos en el backend
+docker compose exec backend python manage.py createsuperuser
+docker compose exec backend python manage.py shell
+```
+
+## 📦 Instalación Manual (Sin Docker)
+
+Si prefieres ejecutar el proyecto sin Docker:
+
+### Requisitos del Sistema
+
+#### Backend (Django)
+- Python 3.8+
+- pip (gestor de paquetes de Python)
+- SQLite (incluido) o PostgreSQL (producción)
+
+#### Frontend (Vue.js)
+- Node.js 16+
+- npm 7+
+
+### 1. Configurar el Backend (Django)
 
 ```bash
 # Instalar dependencias del sistema (Ubuntu/Debian)
@@ -52,31 +122,17 @@ sudo apt-get install -y libjpeg-dev zlib1g-dev
 # Instalar dependencias de Python
 pip install -r requirements.txt
 
-# Si tienes problemas con versiones, actualiza psycopg2 y stripe:
-pip install --upgrade psycopg2-binary stripe
-```
-
-#### Configurar la base de datos
-
-```bash
 # Ejecutar migraciones
 python manage.py migrate
 
 # Crear un superusuario
 python manage.py createsuperuser
-```
 
-#### Iniciar el servidor Django
-
-```bash
-# Desarrollo (SQLite)
+# Iniciar el servidor Django
 python manage.py runserver 0.0.0.0:8000
-
-# El backend estará disponible en http://localhost:8000
-# Panel de administración: http://localhost:8000/admin
 ```
 
-### 3. Configurar el Frontend (Vue.js)
+### 2. Configurar el Frontend (Vue.js)
 
 ```bash
 # Navegar al directorio del frontend
@@ -89,86 +145,6 @@ npm install
 npm run dev
 
 # El frontend estará disponible en http://localhost:8080
-```
-
-### 4. Configurar Variables de Entorno (Opcional)
-
-Para producción o uso con Docker, crear archivos `.env`:
-
-#### Backend `.env`:
-```env
-SECRET_KEY=tu-clave-secreta-aqui
-DEBUG=False
-ALLOWED_HOSTS=localhost,127.0.0.1,tu-dominio.com
-
-# PostgreSQL (opcional)
-DB_NAME=ecommerce_db
-DB_USER=ecommerce_user
-DB_PASSWORD=tu-password
-DB_HOST=localhost
-DB_PORT=5432
-
-# Stripe
-STRIPE_PUBLISHABLE_KEY=pk_test_tu_clave
-STRIPE_SECRET_KEY=sk_test_tu_clave
-```
-
-#### Frontend `ecommerce_vue/.env`:
-```env
-VITE_API_URL=http://localhost:8000
-VITE_STRIPE_PUBLISHABLE_KEY=pk_test_tu_clave
-```
-
-## Uso del Sistema
-
-### Acceder a la aplicación
-
-1. **Frontend**: http://localhost:8080
-2. **Backend API**: http://localhost:8000/api/v1/
-3. **Admin Panel**: http://localhost:8000/admin
-
-### APIs Públicas
-
-```bash
-# Listar usuarios
-curl http://localhost:8000/api/v1/public/users/list/
-
-# Listar productos
-curl http://localhost:8000/api/v1/products/all/
-
-# Listar órdenes
-curl http://localhost:8000/api/v1/orders/all/
-```
-
-### Navegación del Frontend
-
-- **Inicio**: Página principal con productos destacados
-- **Todos los Servicios**: Catálogo completo de servicios de hosting
-- **Usuarios**: Lista pública de todos los usuarios
-- **Productos**: Lista pública de todos los productos
-- **Compras**: Lista pública de todas las órdenes
-- **Carrito**: Gestión del carrito de compras
-- **Mi Cuenta**: Panel del usuario (requiere autenticación)
-- **Mis Servicios**: Suscripciones activas (requiere autenticación)
-
-## Compilar para Producción
-
-### Backend
-```bash
-# Recolectar archivos estáticos
-python manage.py collectstatic --noinput
-
-# Usar servidor WSGI como Gunicorn
-pip install gunicorn
-gunicorn ecommerce_project.wsgi:application --bind 0.0.0.0:8000
-```
-
-### Frontend
-```bash
-cd ecommerce_vue
-npm run build
-
-# Los archivos compilados estarán en ecommerce_vue/dist/
 ```
 
 ## Estructura del Proyecto
@@ -186,68 +162,48 @@ tpFinal/
 ├── users/                  # App de usuarios
 ├── products/               # App de productos
 ├── orders/                 # App de órdenes/compras
+├── docker-compose.yml      # Configuración de Docker Compose
+├── start-project.sh        # Script de inicio rápido
 ├── manage.py
 └── requirements.txt
 ```
 
-## Comandos Útiles
-
-### Backend
-```bash
-# Crear migraciones
-python manage.py makemigrations
-
-# Aplicar migraciones
-python manage.py migrate
-
-# Crear superusuario
-python manage.py createsuperuser
-
-# Shell de Django
-python manage.py shell
-
-# Verificar proyecto
-python manage.py check
-```
-
-### Frontend
-```bash
-# Instalar dependencias
-npm install
-
-# Desarrollo
-npm run dev
-
-# Compilar para producción
-npm run build
-
-# Vista previa de build
-npm run preview
-```
-
 ## Solución de Problemas
 
-### Error: "No module named 'django'"
+### Error: "Docker is not running"
+Asegúrate de que Docker Desktop esté abierto y en ejecución.
+
+### Error: "Port already in use"
+Si los puertos 8000, 3000 o 5432 ya están en uso:
 ```bash
-pip install -r requirements.txt
+# Ver qué está usando el puerto
+sudo lsof -i :8000
+# O en Windows:
+netstat -ano | findstr :8000
+
+# Detener otros contenedores
+docker compose down
 ```
 
-### Error con Pillow (imágenes)
+### Error con la base de datos
 ```bash
-sudo apt-get install -y libjpeg-dev zlib1g-dev
-pip install --upgrade Pillow
+# Reiniciar solo la base de datos
+docker compose restart db
+
+# O reset completo
+docker compose down -v
+./start-project.sh
 ```
 
-### Error con psycopg2 en Python 3.12+
+### Ver logs de errores
 ```bash
-pip install --upgrade psycopg2-binary
-```
+# Ver todos los logs
+docker compose logs
 
-### Puerto ya en uso
-```bash
-# Cambiar el puerto del servidor
-python manage.py runserver 0.0.0.0:8001
-npm run dev -- --port 8081
+# Ver logs de un servicio específico
+docker compose logs backend
+docker compose logs frontend
+docker compose logs db
 ```
 
 ## Tecnologías Utilizadas
@@ -258,7 +214,7 @@ npm run dev -- --port 8081
 - Djoser (autenticación)
 - Stripe (pagos)
 - Pillow (imágenes)
-- SQLite/PostgreSQL
+- PostgreSQL (en Docker) / SQLite (local)
 
 ### Frontend
 - Vue.js 3
@@ -267,6 +223,11 @@ npm run dev -- --port 8081
 - Axios
 - Bulma CSS
 - Vite
+
+### DevOps
+- Docker & Docker Compose
+- Nginx (para servir el frontend)
+- PostgreSQL 13
 
 ## Licencia
 
