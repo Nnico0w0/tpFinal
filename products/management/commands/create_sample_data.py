@@ -1,7 +1,10 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
+from django.utils import timezone
+from datetime import timedelta
 from products.models import Category, Product
 from users.models import Person, UserProfile
+from orders.models import Order, OrderItem, Subscription
 
 
 class Command(BaseCommand):
@@ -198,6 +201,104 @@ class Command(BaseCommand):
                 is_active=True
             )
             self.stdout.write(f'✓ Created test customer (username: customer, password: customer123)')
+
+        # Create sample orders for best-selling products
+        self.stdout.write('\nCreating sample orders...')
+        
+        # Get some products to create orders for
+        vps_business = Product.objects.filter(slug='vps-business').first()
+        cloud_starter = Product.objects.filter(slug='cloud-starter').first()
+        professional_shared = Product.objects.filter(slug='professional-shared').first()
+        
+        if vps_business and cloud_starter and professional_shared and customer_user:
+            # Create multiple orders to make these products "best sellers"
+            
+            # VPS Business - 5 orders (top seller)
+            for i in range(5):
+                order = Order.objects.create(
+                    user=customer_user,
+                    first_name='John',
+                    last_name='Doe',
+                    email='customer@test.com',
+                    address=f'123 Main St #{i+1}',
+                    zipcode='12345',
+                    phone='+0987654321',
+                    place='New York',
+                    paid_amount=vps_business.price,
+                    status='COMPLETED'
+                )
+                order_item = OrderItem.objects.create(
+                    order=order,
+                    product=vps_business,
+                    price=vps_business.price,
+                    quantity=1,
+                    billing_cycle_months=12
+                )
+                # Create subscription
+                Subscription.objects.create(
+                    order_item=order_item,
+                    end_date=timezone.now() + timedelta(days=365),
+                    status='ACTIVE',
+                    domain_name=f'client{i+1}.example.com'
+                )
+            
+            # Cloud Starter - 3 orders (second best seller)
+            for i in range(3):
+                order = Order.objects.create(
+                    user=customer_user,
+                    first_name='Jane',
+                    last_name='Smith',
+                    email='customer@test.com',
+                    address=f'456 Oak Ave #{i+1}',
+                    zipcode='67890',
+                    phone='+0987654321',
+                    place='Los Angeles',
+                    paid_amount=cloud_starter.price,
+                    status='COMPLETED'
+                )
+                order_item = OrderItem.objects.create(
+                    order=order,
+                    product=cloud_starter,
+                    price=cloud_starter.price,
+                    quantity=1,
+                    billing_cycle_months=6
+                )
+                Subscription.objects.create(
+                    order_item=order_item,
+                    end_date=timezone.now() + timedelta(days=180),
+                    status='ACTIVE',
+                    domain_name=f'cloud{i+1}.example.com'
+                )
+            
+            # Professional Shared - 2 orders (third best seller)
+            for i in range(2):
+                order = Order.objects.create(
+                    user=customer_user,
+                    first_name='Bob',
+                    last_name='Johnson',
+                    email='customer@test.com',
+                    address=f'789 Pine Rd #{i+1}',
+                    zipcode='11111',
+                    phone='+0987654321',
+                    place='Chicago',
+                    paid_amount=professional_shared.price,
+                    status='COMPLETED'
+                )
+                order_item = OrderItem.objects.create(
+                    order=order,
+                    product=professional_shared,
+                    price=professional_shared.price,
+                    quantity=1,
+                    billing_cycle_months=12
+                )
+                Subscription.objects.create(
+                    order_item=order_item,
+                    end_date=timezone.now() + timedelta(days=365),
+                    status='ACTIVE',
+                    domain_name=f'shared{i+1}.example.com'
+                )
+            
+            self.stdout.write(f'✓ Created sample orders (10 total)')
 
         self.stdout.write(self.style.SUCCESS('\n✅ Sample data created successfully!'))
         self.stdout.write(self.style.WARNING('\n⚠️  SECURITY WARNING: Default passwords are WEAK and for DEVELOPMENT ONLY!'))

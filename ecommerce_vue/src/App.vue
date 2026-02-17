@@ -5,7 +5,8 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="/">
-          <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+          <img src="@/assets/logo.png" alt="buildServe" style="max-height: 50px; width: auto;">
+          <span class="logo-text">buildServe</span>
         </a>
 
         <a role="button" class="navbar-burger" aria-label="menu" 
@@ -64,7 +65,7 @@
 
     <!-- footer -->
     <footer class="footer">
-      <p class="has-text-centered">Copyright (c) 2021</p>
+      <p class="has-text-centered">Copyright (c) 2026 buildServe - All rights reserved</p>
     </footer>
 
   </div>
@@ -112,7 +113,95 @@ export default {
 </script>
 
 <style lang="scss">
+// Custom color palette
+$primary-dark: #202022;
+$secondary-gray: #878787;
+$light-gray: #CACACA;
+$accent-cyan: #00BBC9;
+$accent-dark-cyan: #00747C;
+
+// Override Bulma variables
+$primary: $accent-cyan;
+$link: $accent-dark-cyan;
+$info: $accent-cyan;
+$dark: $primary-dark;
+
 @import 'bulma/bulma.sass';
+
+// Custom styles with new color palette
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+}
+
+.navbar {
+  background-color: $primary-dark !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  
+  .navbar-item {
+    color: $light-gray !important;
+    
+    &:hover {
+      background-color: rgba(255,255,255,0.1) !important;
+      color: white !important;
+    }
+  }
+  
+  .logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: $accent-cyan;
+    margin-left: 10px;
+  }
+  
+  .navbar-burger span {
+    background-color: $light-gray;
+  }
+  
+  .button {
+    &.is-primary {
+      background-color: $accent-cyan;
+      border-color: $accent-cyan;
+      
+      &:hover {
+        background-color: $accent-dark-cyan;
+        border-color: $accent-dark-cyan;
+      }
+    }
+    
+    &.is-info {
+      background-color: $accent-dark-cyan;
+      border-color: $accent-dark-cyan;
+      
+      &:hover {
+        background-color: darken($accent-dark-cyan, 10%);
+      }
+    }
+    
+    &.is-success {
+      background-color: $accent-cyan;
+      border-color: $accent-cyan;
+      
+      &:hover {
+        background-color: $accent-dark-cyan;
+      }
+    }
+  }
+}
+
+.section {
+  flex: 1;
+}
+
+.footer {
+  background-color: $primary-dark;
+  color: $light-gray;
+  padding: 2rem 1.5rem;
+  margin-top: auto;
+}
+
 .lds-dual-ring {
   display: inline-block;
   width:80px;
@@ -125,8 +214,9 @@ export default {
   height: 64px;
   margin:8px;
   border-radius: 50%;
-  border-color: 6px solid #ccc;
-  animation: lds-dual-ring 1.2s liner infinite;
+  border: 6px solid $accent-cyan;
+  border-color: $accent-cyan transparent $accent-cyan transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
 }
 @keyframes lds-dual-ring {
   0% {
@@ -139,7 +229,7 @@ export default {
 .is-loading-bar {
   height:0;
   overflow: hidden;
-  --webkit-transition: all 0.3s;
+  -webkit-transition: all 0.3s;
   transition: all 0.3s;
   &.is-loading {
     height:80px;
