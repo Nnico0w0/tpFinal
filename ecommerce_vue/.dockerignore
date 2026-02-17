@@ -33,7 +33,6 @@ Thumbs.db
 # Docker
 Dockerfile
 .dockerignore
-nginx.conf
 
 # Git
 .git
