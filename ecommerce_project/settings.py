@@ -99,24 +99,25 @@ WSGI_APPLICATION = 'ecommerce_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Use PostgreSQL when running in Docker (DB_HOST is set), otherwise use SQLite for local development
+if os.environ.get('DB_HOST'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DB_NAME', 'ecommerce_db'),
+            'USER': os.environ.get('DB_USER', 'ecommerce_user'),
+            'PASSWORD': os.environ.get('DB_PASSWORD', 'ecommerce_password'),
+            'HOST': os.environ.get('DB_HOST', 'db'),
+            'PORT': os.environ.get('DB_PORT', '5432'),
+        }
     }
-}
-
-# For production with PostgreSQL, uncomment this and comment out the SQLite config above:
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ.get('DB_NAME', 'ecommerce_db'),
-#         'USER': os.environ.get('DB_USER', 'ecommerce_user'),
-#         'PASSWORD': os.environ.get('DB_PASSWORD', 'ecommerce_password'),
-#         'HOST': os.environ.get('DB_HOST', 'db'),
-#         'PORT': os.environ.get('DB_PORT', '5432'),
-#     }
-# }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
