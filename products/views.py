@@ -13,9 +13,8 @@ class TopSellingProductsList(APIView):
     """Return top 3 best-selling products"""
     
     def get(self, request, format=None):
-        from orders.models import OrderItem
-        
         # Get products with their total sales count
+        # 'items' is the related_name from OrderItem to Product
         top_products = Product.objects.annotate(
             total_sales=Count('items')
         ).filter(
