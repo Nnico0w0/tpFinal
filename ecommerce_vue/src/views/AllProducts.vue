@@ -28,7 +28,7 @@
               <td>{{ product.storage_gb || '-' }}</td>
               <td>{{ product.ram_gb || '-' }}</td>
               <td>{{ product.cpu_cores || '-' }}</td>
-              <td>{{ product.description.substring(0, 100) }}...</td>
+              <td>{{ product.description ? product.description.substring(0, 100) + '...' : '-' }}</td>
             </tr>
           </tbody>
         </table>
