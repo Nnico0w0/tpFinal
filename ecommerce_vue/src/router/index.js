@@ -14,6 +14,9 @@ import MyServices from '../views/MyServices.vue'
 import Services from '../views/Services.vue'
 import Checkout from '../views/Checkout.vue'
 import Success from '../views/Success.vue'
+import AllUsers from '../views/AllUsers.vue'
+import AllProducts from '../views/AllProducts.vue'
+import AllOrders from '../views/AllOrders.vue'
 
 const routes = [
   {
@@ -33,6 +36,21 @@ const routes = [
     meta: {
       requiredLogin: true
     }
+  },
+  {
+    path: '/all-users',
+    name: 'AllUsers',
+    component: AllUsers
+  },
+  {
+    path: '/all-products',
+    name: 'AllProducts',
+    component: AllProducts
+  },
+  {
+    path: '/all-orders',
+    name: 'AllOrders',
+    component: AllOrders
   },
   {
     path: '/about',
