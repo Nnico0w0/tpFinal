@@ -11,7 +11,14 @@
             
             <div class="column is-3">
                 <h2 class="subtitle">Information</h2>
-                <p class="is-size-6 has-text-grey">${{ product.price }}</p>
+                <p class="is-size-6 has-text-grey mb-2"><strong>Price:</strong> ${{ product.price }}/month</p>
+                
+                <div class="box" v-if="product.storage_gb || product.ram_gb || product.cpu_cores">
+                    <h3 class="is-size-6 has-text-weight-bold mb-2">Specifications</h3>
+                    <p class="is-size-7" v-if="product.storage_gb"><strong>Storage:</strong> {{ product.storage_gb }} GB</p>
+                    <p class="is-size-7" v-if="product.ram_gb"><strong>RAM:</strong> {{ product.ram_gb }} GB</p>
+                    <p class="is-size-7" v-if="product.cpu_cores"><strong>CPU:</strong> {{ product.cpu_cores }}</p>
+                </div>
 
                 <div class="field has-addons mt-6">
                     <div class="control">

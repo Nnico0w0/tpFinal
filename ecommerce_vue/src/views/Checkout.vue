@@ -93,6 +93,20 @@
                                 <input class="input" v-model="place">
                             </div>
                         </div>
+                        
+                        <div class="field">
+                            <label>Billing Cycle*</label>  
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select v-model="billing_cycle">
+                                        <option value="1">1 Month</option>
+                                        <option value="3">3 Months (Save 5%)</option>
+                                        <option value="6">6 Months (Save 10%)</option>
+                                        <option value="12">12 Months (Save 15%)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -133,6 +147,7 @@ export default {
             address: '',
             zipcode: '',
             place: '',
+            billing_cycle: 1,
             errors: []
         }
     },
@@ -143,7 +158,16 @@ export default {
 
         // if have item show stripe form
         if(this.cartTotalLength > 0) {
-            this.stripe = Stripe('pk_test_2Kf7j9g3pFaZg0uo1VA6HMdi') //publick key
+            // Load Stripe publishable key from environment variable
+            // This is safe to expose in frontend code as it's the PUBLIC key
+            // Get your key from: https://dashboard.stripe.com/test/apikeys
+            const stripeKey = process.env.VUE_APP_STRIPE_PUBLISHABLE_KEY || 'pk_test_REPLACE_WITH_YOUR_KEY'
+            
+            if (stripeKey === 'pk_test_REPLACE_WITH_YOUR_KEY') {
+                console.warn('⚠️  Using placeholder Stripe key. Set VUE_APP_STRIPE_PUBLISHABLE_KEY in .env')
+            }
+            
+            this.stripe = Stripe(stripeKey)
             const elements = this.stripe.elements();
             this.card = elements.create('card', { hidePostalCode: true })
 
@@ -219,7 +243,8 @@ export default {
                 const obj = {
                     product: item.product.id,
                     quantity: item.quantity,
-                    price: item.product.price * item.quantity
+                    price: item.product.price * item.quantity,
+                    billing_cycle_months: this.billing_cycle
                 }
 
                 items.push(obj)

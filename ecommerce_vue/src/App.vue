@@ -20,42 +20,24 @@
       <div id="navbarBasicExample" class="navbar-menu" v-bind:class="{'is-active': showMobileMenu}">
         
         <div class="navbar-start">
-          
-          <!-- search -->
-          <form method="GET" action="/search">
-            <div class="field has-addons">
-              <div class="control">
-                <input class="input" type="text" placeholder="What are you looking for?" name="query" style="margin-top:8px">
-              </div>
-
-              <div class="control">
-                <button class="button is-success" style="margin-top:8px">
-                    <span class="icon">
-                      <i class="fas fa-search"></i>
-                    </span>
-                </button>
-              </div>
-            </div>
-          </form>
-          
+          <router-link to="/" class="navbar-item">Inicio</router-link>
+          <router-link to="/services" class="navbar-item">Todos los Servicios</router-link>
         </div>
 
         <div class="navbar-end">
-
-          <a href="/summer" class="navbar-item">Summer</a>
-          <a  href="/winter" class="navbar-item">Winter</a>
           
           <div class="navbar-item">
             <div class="buttons">
 
-
               <template v-if="$store.state.isAuthenticated">
-                  <router-link to="/my-account" class="button is-light">My Account</router-link>
+                  <router-link to="/my-services" class="button is-info">Mis Servicios</router-link>
+                  <router-link to="/my-account" class="button is-light">Mi Cuenta</router-link>
+                  <a v-if="$store.state.isAdmin" href="http://localhost:8000/admin/" target="_blank" class="button is-warning">Admin Panel</a>
               </template>
 
               <template v-else>
-                <router-link to="/sign-up" class="button is-primary">Sign up</router-link>
-                <router-link to="/log-in" class="button is-info">Log in</router-link>
+                <router-link to="/sign-up" class="button is-primary">Registrarse</router-link>
+                <router-link to="/log-in" class="button is-info">Iniciar Sesión</router-link>
               </template>
               
               <router-link to="/cart" class="button is-success">

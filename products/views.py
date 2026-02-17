@@ -16,6 +16,25 @@ class LatestProductsList(APIView):
         return Response(serialize.data) 
 
 
+class AllProductsList(APIView):
+    """Return all products from database"""
+    
+    def get(self, request, format=None):
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+
+
+class CategoriesList(APIView):
+    """Return all categories"""
+    
+    def get(self, request, format=None):
+        categories = Category.objects.all()
+        # Return just id, name and slug for categories list
+        data = [{'id': cat.id, 'name': cat.name, 'slug': cat.slug} for cat in categories]
+        return Response(data)
+
+
 class ProductDetail(APIView):
 
     def get_object(self, category_slug, product_slug):

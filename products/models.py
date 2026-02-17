@@ -28,6 +28,10 @@ class Product(models.Model):
     slug = models.SlugField()
     description = models.TextField(null=True,  blank=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    # Hosting-specific fields
+    storage_gb = models.IntegerField(default=10, help_text='Storage in GB')
+    ram_gb = models.IntegerField(default=1, help_text='RAM in GB')
+    cpu_cores = models.CharField(max_length=50, default='1 Core', help_text='CPU cores specification')
     image = models.ImageField(upload_to='uploads/products/', null=True, blank=True)
     thumbnail = models.ImageField(upload_to='uploads/products/thumbnail/', null=True,  blank=True)
     date_added = models.DateTimeField(auto_now_add=True)

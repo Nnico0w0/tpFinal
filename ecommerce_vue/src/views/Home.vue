@@ -2,15 +2,15 @@
   <div class="home">
     <section class="hero is-medium is-dark mb-6">
       <div class="hero-body has-text-centered">
-        <p class="title mb-6">Welcome to Ecommerce</p>
-        <p class="subtitle">The best product store online</p>
+        <p class="title mb-6">Welcome to Hosting Services Store</p>
+        <p class="subtitle">The best hosting solutions for your projects</p>
       </div>
     </section>
 
     <div class="columns is-multiline">
       
       <div class="column is-12">
-        <h2 class="is-size-2 has-text-centered">Latest Products</h2>
+        <h2 class="is-size-2 has-text-centered">Latest Hosting Plans</h2>
       </div>
       
       <ProductBox 
@@ -39,7 +39,7 @@ export default {
   },
   mounted() {
     this.getLastestProducts()
-    document.title = 'Home | Ecommerce Store'
+    document.title = 'Home | Hosting Services Store'
   },
   methods: {
     async getLastestProducts() {

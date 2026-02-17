@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import store from '../store'
 
 import Home from '../views/Home.vue'
-
 import Product from '../views/Product.vue'
 import Category from '../views/Category.vue'
 import Search from '../views/Search.vue'
@@ -11,6 +10,8 @@ import Cart from '../views/Cart.vue'
 import SignUp from '../views/SignUp.vue'
 import Login from '../views/Login.vue'
 import MyAccount from '../views/MyAccount.vue'
+import MyServices from '../views/MyServices.vue'
+import Services from '../views/Services.vue'
 import Checkout from '../views/Checkout.vue'
 import Success from '../views/Success.vue'
 
@@ -19,6 +20,19 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/services',
+    name: 'Services',
+    component: Services
+  },
+  {
+    path: '/my-services',
+    name: 'MyServices',
+    component: MyServices,
+    meta: {
+      requiredLogin: true
+    }
   },
   {
     path: '/about',
