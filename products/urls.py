@@ -3,6 +3,7 @@ from products import views
 
 urlpatterns = [
     path('latest', views.LatestProductsList.as_view()),
+    path('top-selling', views.TopSellingProductsList.as_view()),
     path('all/', views.AllProductsList.as_view()),
     path('categories/', views.CategoriesList.as_view()),
     path('search/', views.search_api),

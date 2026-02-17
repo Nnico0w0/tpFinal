@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, Sum, Count
 from django.http import Http404
 
 from rest_framework.views import APIView
@@ -7,6 +7,30 @@ from rest_framework.decorators import api_view
 
 from .models import Product, Category
 from .serializers import ProductSerializer, CategorySerializer
+
+
+class TopSellingProductsList(APIView):
+    """Return top 3 best-selling products"""
+    
+    def get(self, request, format=None):
+        from orders.models import OrderItem
+        
+        # Get products with their total sales count
+        top_products = Product.objects.annotate(
+            total_sales=Count('items')
+        ).filter(
+            total_sales__gt=0
+        ).order_by('-total_sales')[:3]
+        
+        # If we don't have enough products with sales, fill with latest products
+        if top_products.count() < 3:
+            latest = Product.objects.exclude(
+                id__in=[p.id for p in top_products]
+            ).order_by('-date_added')[:3-top_products.count()]
+            top_products = list(top_products) + list(latest)
+        
+        serializer = ProductSerializer(top_products, many=True)
+        return Response(serializer.data)
 
 class LatestProductsList(APIView):
 
