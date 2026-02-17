@@ -17,6 +17,15 @@ from .serializers import (
     MyOrderSerializer, MyOrderItemSerializer, SubscriptionSerializer)
 
 
+class AllOrdersListView(APIView):
+    """Public API to list all orders"""
+    
+    def get(self, request, format=None):
+        orders = Order.objects.all().order_by('-created_at')
+        serializer = MyOrderSerializer(orders, many=True)
+        return Response(serializer.data)
+
+
 @api_view(['POST'])
 @authentication_classes([authentication.TokenAuthentication])
 @permission_classes([permissions.IsAuthenticated])
