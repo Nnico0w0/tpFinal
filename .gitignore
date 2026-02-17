@@ -1,0 +1,4 @@
+data
+ecommerce_vue/node_modules/
+ecommerce_vue/dist/
+.env
