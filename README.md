@@ -115,8 +115,8 @@ STRIPE_SECRET_KEY=sk_test_tu_clave
 
 #### Frontend `ecommerce_vue/.env`:
 ```env
-VUE_APP_API_URL=http://localhost:8000
-VUE_APP_STRIPE_PUBLISHABLE_KEY=pk_test_tu_clave
+VITE_API_URL=http://localhost:8000
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_tu_clave
 ```
 
 ## Uso del Sistema
