@@ -60,26 +60,24 @@ cd tpFinal
 cp .env.example .env
 ```
 
-3. Configurar las variables de entorno en `.env`:
+3. **IMPORTANTE**: Editar `.env` y reemplazar las claves de Stripe con tus propias claves de test:
 ```env
-# Django
-SECRET_KEY=tu-clave-secreta-aqui
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-
-# Database
-DB_NAME=ecommerce_db
-DB_USER=ecommerce_user
-DB_PASSWORD=ecommerce_password
-DB_HOST=db
-DB_PORT=5432
-
-# Stripe (Test Mode)
-STRIPE_PUBLISHABLE_KEY=pk_test_tu_clave_publica
-STRIPE_SECRET_KEY=sk_test_tu_clave_secreta
+# Get your test keys from: https://dashboard.stripe.com/test/apikeys
+STRIPE_PUBLISHABLE_KEY=pk_test_your_actual_test_key_here
+STRIPE_SECRET_KEY=sk_test_your_actual_test_key_here
 ```
 
-4. Levantar los servicios:
+4. Crear archivo `.env` para Vue:
+```bash
+cp ecommerce_vue/.env.example ecommerce_vue/.env
+```
+
+5. **IMPORTANTE**: Editar `ecommerce_vue/.env` y reemplazar la clave de Stripe:
+```env
+VUE_APP_STRIPE_PUBLISHABLE_KEY=pk_test_your_actual_test_key_here
+```
+
+6. Levantar los servicios:
 ```bash
 docker-compose up -d
 ```
@@ -117,7 +115,19 @@ docker-compose exec backend python manage.py createsuperuser
 
 ## Stripe en Modo Test
 
-La aplicación está configurada para usar Stripe en modo de prueba. Para realizar compras de prueba, usa estas tarjetas de test:
+La aplicación está configurada para usar Stripe en modo de prueba.
+
+### Configuración Requerida
+
+1. Crear cuenta gratuita en Stripe: https://dashboard.stripe.com/register
+2. Obtener tus claves de test en: https://dashboard.stripe.com/test/apikeys
+3. Configurar las claves en los archivos `.env`:
+   - Backend: `STRIPE_PUBLISHABLE_KEY` y `STRIPE_SECRET_KEY`
+   - Frontend: `VUE_APP_STRIPE_PUBLISHABLE_KEY`
+
+### Tarjetas de Prueba
+
+Para realizar compras de prueba, usa estas tarjetas de test:
 
 - **Visa exitosa**: 4242 4242 4242 4242
 - **Requiere autenticación**: 4000 0025 0000 3155

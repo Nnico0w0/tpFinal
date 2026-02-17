@@ -14,19 +14,26 @@ git clone <repository-url>
 cd tpFinal
 ```
 
-2. **Ejecutar el script de inicio automático**
+2. **Configurar claves de Stripe**
+   
+   Antes de ejecutar el script, necesitas obtener tus claves de test de Stripe:
+   - Crear cuenta en: https://dashboard.stripe.com/register
+   - Obtener claves en: https://dashboard.stripe.com/test/apikeys
+   - El script te pedirá estas claves durante la instalación
+
+3. **Ejecutar el script de inicio automático**
 ```bash
 chmod +x start.sh
 ./start.sh
 ```
 
 El script automáticamente:
-- Crea el archivo .env
+- Crea los archivos .env con tus claves de Stripe
 - Levanta los contenedores de Docker
 - Ejecuta las migraciones
 - Crea datos de ejemplo
 
-3. **Acceder a la aplicación**
+4. **Acceder a la aplicación**
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8000
 - Admin Panel: http://localhost:8000/admin
@@ -83,8 +90,15 @@ DB_PASSWORD=ecommerce_password
 DB_HOST=localhost
 DB_PORT=5432
 
-STRIPE_PUBLISHABLE_KEY=pk_test_51QhRcYKv6xvJDgFBXYz
-STRIPE_SECRET_KEY=sk_test_51QhRcYKv6xvJDgFBXYz
+# Get your test keys from: https://dashboard.stripe.com/test/apikeys
+STRIPE_PUBLISHABLE_KEY=pk_test_your_actual_key_here
+STRIPE_SECRET_KEY=sk_test_your_actual_key_here
+```
+
+Crear archivo `ecommerce_vue/.env`:
+```env
+VUE_APP_API_URL=http://localhost:8000
+VUE_APP_STRIPE_PUBLISHABLE_KEY=pk_test_your_actual_key_here
 ```
 
 5. **Ejecutar migraciones**
@@ -104,7 +118,14 @@ python manage.py runserver
 
 ### Frontend (Vue.js)
 
-1. **Instalar dependencias**
+1. **Configurar variables de entorno**
+```bash
+cd ecommerce_vue
+cp .env.example .env
+# Edit .env and add your Stripe publishable key
+```
+
+2. **Instalar dependencias**
 ```bash
 cd ecommerce_vue
 npm install
@@ -223,8 +244,10 @@ python manage.py collectstatic
 - Ejecutar migraciones: `python manage.py migrate`
 
 ### Error de Stripe
-- Verificar claves de API en `.env`
+- Verificar claves de API en archivos `.env` (backend y frontend)
 - Asegurarse de usar claves de test (comienzan con `pk_test_` y `sk_test_`)
+- Obtener claves reales de: https://dashboard.stripe.com/test/apikeys
+- Las claves placeholder deben ser reemplazadas antes de usar la aplicación
 
 ### Puerto ya en uso
 ```bash

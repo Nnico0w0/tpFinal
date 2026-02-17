@@ -13,13 +13,69 @@ fi
 echo "✓ Docker is running"
 echo ""
 
+# Function to get Stripe keys
+get_stripe_keys() {
+    echo "📝 Stripe Configuration"
+    echo "   You need test API keys from Stripe."
+    echo "   Get them from: https://dashboard.stripe.com/test/apikeys"
+    echo ""
+    
+    read -p "   Enter your Stripe PUBLISHABLE key (pk_test_...): " stripe_pub_key
+    read -p "   Enter your Stripe SECRET key (sk_test_...): " stripe_secret_key
+    
+    if [[ ! $stripe_pub_key =~ ^pk_test_ ]] || [[ ! $stripe_secret_key =~ ^sk_test_ ]]; then
+        echo "⚠️  Warning: Keys should start with pk_test_ and sk_test_ for test mode"
+        read -p "   Continue anyway? (y/n): " continue_choice
+        if [[ $continue_choice != "y" ]]; then
+            echo "❌ Setup cancelled"
+            exit 1
+        fi
+    fi
+}
+
 # Create .env file if it doesn't exist
 if [ ! -f .env ]; then
-    echo "📝 Creating .env file from .env.example..."
-    cp .env.example .env
-    echo "✓ .env file created"
+    echo "📝 Creating backend .env file..."
+    
+    get_stripe_keys
+    
+    cat > .env << EOF
+# Django Backend
+SECRET_KEY=django-insecure-dev-key-$(openssl rand -hex 32)
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1,backend
+
+# Database
+DB_NAME=ecommerce_db
+DB_USER=ecommerce_user
+DB_PASSWORD=ecommerce_password
+DB_HOST=db
+DB_PORT=5432
+
+# Stripe Test Keys
+STRIPE_PUBLISHABLE_KEY=$stripe_pub_key
+STRIPE_SECRET_KEY=$stripe_secret_key
+
+# Frontend
+VUE_APP_API_URL=http://localhost:8000
+EOF
+    echo "✓ Backend .env file created"
 else
-    echo "✓ .env file already exists"
+    echo "✓ Backend .env file already exists"
+    # Read existing stripe key
+    stripe_pub_key=$(grep STRIPE_PUBLISHABLE_KEY .env | cut -d '=' -f2)
+fi
+
+# Create frontend .env file
+if [ ! -f ecommerce_vue/.env ]; then
+    echo "📝 Creating frontend .env file..."
+    cat > ecommerce_vue/.env << EOF
+VUE_APP_API_URL=http://localhost:8000
+VUE_APP_STRIPE_PUBLISHABLE_KEY=$stripe_pub_key
+EOF
+    echo "✓ Frontend .env file created"
+else
+    echo "✓ Frontend .env file already exists"
 fi
 
 echo ""
