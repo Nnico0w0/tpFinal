@@ -2,7 +2,7 @@
     <div class="page-services">
         <div class="columns is-multiline">
             <div class="column is-12">
-                <h1 class="title">Todos los Servicios de Hosting</h1>
+                <h1 class="title">All Hosting Services</h1>
             </div>
 
             <div class="column is-12">

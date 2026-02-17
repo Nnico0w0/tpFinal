@@ -30,8 +30,7 @@ class CategoriesList(APIView):
     
     def get(self, request, format=None):
         categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=False)
-        # Return just id and name for categories list
+        # Return just id, name and slug for categories list
         data = [{'id': cat.id, 'name': cat.name, 'slug': cat.slug} for cat in categories]
         return Response(data)
 

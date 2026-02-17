@@ -158,8 +158,16 @@ export default {
 
         // if have item show stripe form
         if(this.cartTotalLength > 0) {
-            // Test mode Stripe key - Safe for development
-            this.stripe = Stripe('pk_test_51QhRcYKv6xvJDgFBXYz')
+            // Load Stripe publishable key from environment variable
+            // This is safe to expose in frontend code as it's the PUBLIC key
+            // Get your key from: https://dashboard.stripe.com/test/apikeys
+            const stripeKey = process.env.VUE_APP_STRIPE_PUBLISHABLE_KEY || 'pk_test_REPLACE_WITH_YOUR_KEY'
+            
+            if (stripeKey === 'pk_test_REPLACE_WITH_YOUR_KEY') {
+                console.warn('⚠️  Using placeholder Stripe key. Set VUE_APP_STRIPE_PUBLISHABLE_KEY in .env')
+            }
+            
+            this.stripe = Stripe(stripeKey)
             const elements = this.stripe.elements();
             this.card = elements.create('card', { hidePostalCode: true })
 

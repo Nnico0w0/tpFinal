@@ -28,7 +28,22 @@ docker-compose up -d
 
 echo ""
 echo "⏳ Waiting for database to be ready..."
-sleep 10
+echo "   This may take 30-60 seconds..."
+
+# Wait for database to be ready with retry logic
+max_attempts=30
+attempt=0
+until docker-compose exec -T db pg_isready -U ecommerce_user > /dev/null 2>&1; do
+    attempt=$((attempt + 1))
+    if [ $attempt -eq $max_attempts ]; then
+        echo "❌ Database failed to start after $max_attempts attempts"
+        exit 1
+    fi
+    echo "   Waiting for database... attempt $attempt/$max_attempts"
+    sleep 2
+done
+
+echo "✓ Database is ready"
 
 echo ""
 echo "🔄 Running migrations..."

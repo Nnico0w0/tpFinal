@@ -155,6 +155,11 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Stripe - Test Mode for Development
-STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY', 'pk_test_51QhRcYKv6xvJDgFBXYz')
-STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_51QhRcYKv6xvJDgFBXYz')
+# WARNING: These are example test keys. In production:
+# 1. NEVER commit real API keys to version control
+# 2. Always use environment variables for sensitive data
+# 3. Rotate keys regularly
+# 4. Use separate keys for each environment
+STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY', 'pk_test_REPLACE_WITH_YOUR_KEY')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_REPLACE_WITH_YOUR_KEY')
 STRIPE_TEST_MODE = True  # Always use test mode for development

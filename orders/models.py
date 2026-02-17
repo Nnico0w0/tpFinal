@@ -38,7 +38,7 @@ class OrderItem(models.Model):
     billing_cycle_months = models.IntegerField(default=1, help_text='Billing cycle in months')
 
     def __str__(self):
-        return f'{self.order} - {self.product}'
+        return f'Order #{self.order.id} - {self.product.name}'
 
 
 class Subscription(models.Model):

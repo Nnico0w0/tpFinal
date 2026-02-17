@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.http import Http404
 from django.utils import timezone
-from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 
 from rest_framework import status, authentication, permissions
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -36,11 +36,20 @@ def checkout(request):
         try:
             # Stripe charge - in test mode if STRIPE_TEST_MODE is True
             # For test mode, you can use test card: 4242 4242 4242 4242
+            
+            # Ensure stripe_token is provided
+            stripe_token = serializer.validated_data.get('stripe_token')
+            if not stripe_token:
+                return Response(
+                    {'error': 'Stripe token is required for payment'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
             charge = stripe.Charge.create(
                 amount=int(paid_amount * 100),
                 currency='USD',
                 description='Charge from Hosting Services Store',
-                source=serializer.validated_data.get('stripe_token', 'tok_visa')  # Default to test token if not provided
+                source=stripe_token
             )
 
             # Save order with COMPLETED status
@@ -48,8 +57,9 @@ def checkout(request):
             
             # Create subscriptions for each order item
             for item in order.items.all():
-                # Calculate end date based on billing cycle
-                end_date = timezone.now() + timedelta(days=30 * item.billing_cycle_months)
+                # Calculate end date using relativedelta for accurate month calculation
+                # This properly handles months with different numbers of days
+                end_date = timezone.now() + relativedelta(months=item.billing_cycle_months)
                 Subscription.objects.create(
                     order_item=item,
                     end_date=end_date,

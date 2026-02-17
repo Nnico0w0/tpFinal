@@ -138,6 +138,12 @@ class Command(BaseCommand):
                 self.stdout.write(f'✓ Created product: {prod.name}')
 
         # Create admin user
+        # WARNING: This creates an admin with a weak default password for DEVELOPMENT ONLY
+        # In production, you MUST:
+        # 1. Use strong, unique passwords
+        # 2. Require password change on first login
+        # 3. Enable two-factor authentication
+        # 4. Use proper user management procedures
         admin_user, created = User.objects.get_or_create(
             username='admin',
             defaults={
@@ -147,7 +153,7 @@ class Command(BaseCommand):
             }
         )
         if created:
-            admin_user.set_password('admin123')
+            admin_user.set_password('admin123')  # WEAK PASSWORD - FOR DEVELOPMENT ONLY
             admin_user.save()
             
             # Create Person for admin
@@ -194,6 +200,8 @@ class Command(BaseCommand):
             self.stdout.write(f'✓ Created test customer (username: customer, password: customer123)')
 
         self.stdout.write(self.style.SUCCESS('\n✅ Sample data created successfully!'))
+        self.stdout.write(self.style.WARNING('\n⚠️  SECURITY WARNING: Default passwords are WEAK and for DEVELOPMENT ONLY!'))
+        self.stdout.write(self.style.WARNING('    In production, use strong passwords and enable 2FA.\n'))
         self.stdout.write('\nYou can now login with:')
         self.stdout.write('  Admin: username=admin, password=admin123')
         self.stdout.write('  Customer: username=customer, password=customer123')
