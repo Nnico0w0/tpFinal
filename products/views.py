@@ -1,12 +1,21 @@
 from django.db.models import Q, Sum, Count
 from django.http import Http404
 
+from rest_framework import viewsets, mixins
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
 
 from .models import Product, Category
 from .serializers import ProductSerializer, CategorySerializer
+
+
+class ProductListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """Public API to list all products - list only"""
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [AllowAny]
 
 
 class TopSellingProductsList(APIView):
