@@ -59,6 +59,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://localhost:3000",  # para frontend en Docker
     "http://127.0.0.1:3000",
+    "http://localhost:8080",  # para desarrollo local con Vite
+    "http://127.0.0.1:8080",
     "http://192.168.0.107:8080"
 ]
 
@@ -99,14 +101,22 @@ WSGI_APPLICATION = 'ecommerce_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'ecommerce_db'),
-        'USER': os.environ.get('DB_USER', 'ecommerce_user'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'ecommerce_password'),
-        'HOST': os.environ.get('DB_HOST', 'db'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# For production with PostgreSQL, uncomment this and comment out the SQLite config above:
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('DB_NAME', 'ecommerce_db'),
+#         'USER': os.environ.get('DB_USER', 'ecommerce_user'),
+#         'PASSWORD': os.environ.get('DB_PASSWORD', 'ecommerce_password'),
+#         'HOST': os.environ.get('DB_HOST', 'db'),
+#         'PORT': os.environ.get('DB_PORT', '5432'),
+#     }
+# }
 
 
 # Password validation
