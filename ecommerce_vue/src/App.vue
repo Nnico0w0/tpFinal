@@ -112,7 +112,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../node_modules/bulma';
+@import 'bulma/bulma.sass';
 .lds-dual-ring {
   display: inline-block;
   width:80px;
