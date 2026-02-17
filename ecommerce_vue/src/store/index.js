@@ -7,7 +7,9 @@ export default createStore({
     },
     isAuthenticated: false,
     token: '',
-    isLoading: false
+    isLoading: false,
+    isAdmin: false,
+    username: ''
   },
   mutations: {
 
@@ -23,9 +25,13 @@ export default createStore({
       if(localStorage.getItem('token')) {
         state.token = localStorage.getItem('token')
         state.isAuthenticated = true
+        state.username = localStorage.getItem('username') || ''
+        state.isAdmin = localStorage.getItem('isAdmin') === 'true'
       } else {
         state.token = ''
         state.isAuthenticated = false
+        state.isAdmin = false
+        state.username = ''
       }
 
     },
@@ -48,9 +54,17 @@ export default createStore({
       state.token = token
       state.isAuthenticated = true
     },
+    setUsername(state, username) {
+      state.username = username
+    },
+    setIsAdmin(state, isAdmin) {
+      state.isAdmin = isAdmin
+    },
     removeToken(state, token) {
       state.token = ''
       state.isAuthenticated = false
+      state.isAdmin = false
+      state.username = ''
     },
     clearCart(state) {
       state.cart = { items: []}
