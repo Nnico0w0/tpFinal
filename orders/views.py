@@ -10,11 +10,22 @@ from rest_framework import status, authentication, permissions
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 
 from .models import OrderItem, Order, Subscription
 from .serializers import (
     OrderItemSerializer, OrderSerializer, 
     MyOrderSerializer, MyOrderItemSerializer, SubscriptionSerializer)
+
+
+class AllOrdersListView(APIView):
+    """Public API to list all orders"""
+    permission_classes = [AllowAny]
+    
+    def get(self, request, format=None):
+        orders = Order.objects.all().order_by('-created_at')
+        serializer = MyOrderSerializer(orders, many=True)
+        return Response(serializer.data)
 
 
 @api_view(['POST'])
