@@ -1,12 +1,21 @@
 from django.db.models import Q, Sum, Count
 from django.http import Http404
 
+from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
 
 from .models import Product, Category
 from .serializers import ProductSerializer, CategorySerializer
+
+
+class ProductListViewSet(viewsets.ReadOnlyModelViewSet):
+    """Public API to list all products"""
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [AllowAny]
 
 
 class TopSellingProductsList(APIView):
@@ -40,7 +49,7 @@ class LatestProductsList(APIView):
 
 
 class AllProductsList(APIView):
-    """Return all products from database"""
+    """Return all products from database (DEPRECATED - Use ProductListViewSet instead)"""
     
     def get(self, request, format=None):
         products = Product.objects.all()
