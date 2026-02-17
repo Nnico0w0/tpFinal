@@ -6,7 +6,7 @@ from django.http import Http404
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
-from rest_framework import status, authentication, permissions, viewsets
+from rest_framework import status, authentication, permissions, viewsets, mixins
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -18,15 +18,15 @@ from .serializers import (
     MyOrderSerializer, MyOrderItemSerializer, SubscriptionSerializer)
 
 
-class OrderListViewSet(viewsets.ReadOnlyModelViewSet):
-    """Public API to list all orders"""
+class OrderListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """Public API to list all orders - list only"""
     queryset = Order.objects.all().order_by('-created_at')
     serializer_class = MyOrderSerializer
     permission_classes = [AllowAny]
 
 
 class AllOrdersListView(APIView):
-    """Public API to list all orders (DEPRECATED - Use OrderListViewSet instead)"""
+    """Public API to list all orders"""
     permission_classes = [AllowAny]
     
     def get(self, request, format=None):
