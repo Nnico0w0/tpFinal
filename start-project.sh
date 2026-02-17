@@ -6,8 +6,24 @@
 # This script starts the entire project with all services
 # Backend API will be accessible at http://localhost:8000
 # Frontend will be accessible at http://localhost:3000
+#
+# Note: Make sure this script is executable
+# Run: chmod +x start-project.sh
 
 set -e  # Exit on any error
+
+# Check if script is executable (for better user experience)
+if [ ! -x "$0" ]; then
+    echo "⚠️  This script is not executable. Attempting to fix..."
+    chmod +x "$0"
+    if [ $? -eq 0 ]; then
+        echo "✅ Fixed! Re-running script..."
+        exec "$0" "$@"
+    else
+        echo "❌ Could not make script executable. Please run: chmod +x $0"
+        exit 1
+    fi
+fi
 
 echo "================================================"
 echo "🚀 Starting E-commerce Project"
