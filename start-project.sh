@@ -60,6 +60,30 @@ fi
 echo "✅ Docker Compose is available"
 echo ""
 
+# Check if .env file exists, if not create it from .env.example
+if [ ! -f .env ]; then
+    echo "📝 Creating .env file from .env.example..."
+    if [ -f .env.example ]; then
+        cp .env.example .env
+        # Set DEBUG=True for development (cross-platform compatible)
+        if [ "$(uname)" = "Darwin" ]; then
+            # macOS (BSD sed)
+            sed -i '' 's/DEBUG=False/DEBUG=True/g' .env
+        else
+            # Linux (GNU sed)
+            sed -i 's/DEBUG=False/DEBUG=True/g' .env
+        fi
+        echo "✅ .env file created"
+        echo "⚠️  Note: Using default configuration. For production, update .env with your own values."
+    else
+        echo "❌ .env.example not found. Please create .env file manually."
+        exit 1
+    fi
+else
+    echo "✅ .env file already exists"
+fi
+echo ""
+
 # Stop any existing containers
 echo "🛑 Stopping any existing containers..."
 $DOCKER_COMPOSE down > /dev/null 2>&1 || true

@@ -36,20 +36,29 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Docker
-Dockerfile
+# Docker (estos archivos no son necesarios dentro del contenedor)
 docker-compose.yml
 .dockerignore
+
+# Directorio del frontend Vue
+ecommerce_vue/
 
 # Archivos de documentación
 README.md
 docs/
 
-# Archivos de entorno
+# Archivos de entorno (se pasan via docker-compose)
 .env
 .env.local
 .env.production
+.env.example
 
 # Archivos temporales
 *.tmp
 *.temp
+
+# Media files (se montan como volumen)
+media/
+
+# Data directory
+data/
