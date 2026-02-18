@@ -19,7 +19,7 @@
                     <tbody>
                         <CartItem
                             v-for="item in cart.items"
-                            v-bind:key="item.id"
+                            v-bind:key="item.product.id"
                             v-bind:initialItem="item"
                             v-on:removeFromCart="removeFromCart"/> <!-- listen the method -->
                     </tbody>
@@ -60,6 +60,7 @@ export default {
     methods: {
         removeFromCart(item) {
             this.cart.items = this.cart.items.filter( i => i.product.id !== item.product.id)
+            localStorage.setItem('cart', JSON.stringify(this.cart))
         }
     },
     computed: {
