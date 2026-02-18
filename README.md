@@ -41,11 +41,13 @@ cd tpFinal
 
 El script se encargará de:
 - ✅ Verificar que Docker esté disponible
+- ✅ Crear el archivo .env si no existe
 - ✅ Construir las imágenes de los contenedores
 - ✅ Iniciar la base de datos PostgreSQL
+- ✅ Esperar a que la base de datos esté lista
 - ✅ Iniciar el backend Django
+- ✅ Ejecutar las migraciones automáticamente
 - ✅ Iniciar el frontend Vue.js
-- ✅ Ejecutar las migraciones
 - ✅ Esperar a que todos los servicios estén listos
 
 3. **Acceder a la aplicación**
@@ -55,6 +57,19 @@ Una vez que el script termine, podrás acceder a:
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8000
 - **Panel de Administración**: http://localhost:8000/admin
+
+### Configuración de Variables de Entorno
+
+El proyecto utiliza un archivo `.env` para la configuración. Este archivo se crea automáticamente desde `.env.example` cuando ejecutas `start-project.sh`.
+
+**Variables importantes:**
+- `DEBUG`: Modo de depuración (True para desarrollo)
+- `SECRET_KEY`: Clave secreta de Django (cambiar en producción)
+- `DB_NAME`, `DB_USER`, `DB_PASSWORD`: Credenciales de PostgreSQL
+- `DB_HOST`, `DB_PORT`: Host y puerto de la base de datos
+- `STRIPE_PUBLISHABLE_KEY`, `STRIPE_SECRET_KEY`: Claves de Stripe para pagos (opcional)
+
+Si necesitas personalizar la configuración, edita el archivo `.env` antes de iniciar el proyecto.
 
 ### Endpoints de API Disponibles
 
