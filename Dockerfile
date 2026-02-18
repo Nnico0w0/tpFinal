@@ -28,8 +28,14 @@ COPY . /app/
 RUN mkdir -p /app/staticfiles
 RUN mkdir -p /app/media
 
+# Make entrypoint script executable
+RUN chmod +x /app/docker-entrypoint.sh
+
 # Exponer puerto
 EXPOSE 8000
+
+# Set entrypoint
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
 
 # Script de inicio
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
