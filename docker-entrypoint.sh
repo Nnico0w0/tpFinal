@@ -3,11 +3,20 @@
 
 set -e
 
+# Configuration
+MAX_RETRIES=30
+RETRY_COUNT=0
+
 # Wait for database to be ready
 echo "Waiting for database connection..."
 while ! pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" > /dev/null 2>&1; do
-    echo "Database is unavailable - sleeping"
-    sleep 1
+    RETRY_COUNT=$((RETRY_COUNT + 1))
+    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+        echo "Error: Database failed to become available after $MAX_RETRIES attempts"
+        exit 1
+    fi
+    echo "Database is unavailable - sleeping (attempt $RETRY_COUNT/$MAX_RETRIES)"
+    sleep 2
 done
 
 echo "Database is up - continuing..."

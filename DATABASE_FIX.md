@@ -38,7 +38,17 @@ The registration endpoint is provided by Djoser and is available at:
 - **Required fields**:
   - `username`: String (unique)
   - `email`: String (valid email)
-  - `password`: String (min 8 characters)
+  - `password`: String
+    - Minimum 8 characters
+    - Cannot be too similar to other personal information
+    - Cannot be a commonly used password
+    - Cannot be entirely numeric
+
+Django's default password validators are enabled in settings.py:
+- UserAttributeSimilarityValidator
+- MinimumLengthValidator (8 characters)
+- CommonPasswordValidator
+- NumericPasswordValidator
 
 ### Example Registration Request:
 ```bash
