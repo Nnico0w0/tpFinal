@@ -94,6 +94,13 @@ if [ ! -f .env ]; then
         # Generar SECRET_KEY aleatorio
         if command -v openssl &> /dev/null; then
             SECRET_KEY=$(openssl rand -hex 32)
+            
+            # Validar que SECRET_KEY se generó correctamente
+            if [ -z "$SECRET_KEY" ]; then
+                echo "${RED}❌ Error: No se pudo generar SECRET_KEY${NC}"
+                exit 1
+            fi
+            
             if [ "$(uname)" = "Darwin" ]; then
                 # macOS (BSD sed)
                 sed -i '' "s/your-super-secret-key-change-this-in-production/django-insecure-$SECRET_KEY/g" .env
@@ -103,6 +110,9 @@ if [ ! -f .env ]; then
                 sed -i "s/your-super-secret-key-change-this-in-production/django-insecure-$SECRET_KEY/g" .env
                 sed -i 's/DEBUG=False/DEBUG=True/g' .env
             fi
+        else
+            echo "${YELLOW}⚠️  openssl no disponible, usando SECRET_KEY por defecto${NC}"
+            echo "   ADVERTENCIA: Cambia SECRET_KEY en .env para producción"
         fi
         
         echo "${GREEN}✅ Archivo .env creado desde .env.example${NC}"
@@ -177,11 +187,17 @@ echo ""
 echo "${BLUE}📋 Paso 6/7: Esperando a que la base de datos esté lista...${NC}"
 echo ""
 
+# Obtener el nombre de usuario de la BD desde .env
+DB_USER=$(grep "^DB_USER=" .env | cut -d '=' -f2)
+if [ -z "$DB_USER" ]; then
+    DB_USER="ecommerce_user"  # fallback al valor por defecto
+fi
+
 max_attempts=30
 attempt=0
 
 while [ $attempt -lt $max_attempts ]; do
-    if $DOCKER_COMPOSE exec -T db pg_isready -U ecommerce_user > /dev/null 2>&1; then
+    if $DOCKER_COMPOSE exec -T db pg_isready -U "$DB_USER" > /dev/null 2>&1; then
         echo "${GREEN}✅ Base de datos está lista${NC}"
         break
     fi
@@ -199,8 +215,27 @@ fi
 
 echo ""
 
-# Esperar un poco más para que el backend complete las migraciones
-sleep 5
+# Esperar a que el backend esté listo con retry logic
+echo "⏳ Esperando a que el backend complete las migraciones..."
+max_attempts=20
+attempt=0
+
+while [ $attempt -lt $max_attempts ]; do
+    # Verificar si el backend responde correctamente
+    if $DOCKER_COMPOSE exec -T backend python manage.py check > /dev/null 2>&1; then
+        echo "${GREEN}✅ Backend completó inicialización${NC}"
+        break
+    fi
+    attempt=$((attempt + 1))
+    printf "   Intento %d/%d...\r" $attempt $max_attempts
+    sleep 3
+done
+
+if [ $attempt -eq $max_attempts ]; then
+    echo ""
+    echo "${YELLOW}⚠️  El backend podría no estar completamente listo${NC}"
+    echo "   Verificando accesibilidad web..."
+fi
 
 # ========================================
 # 7. Verificar que el backend esté respondiendo
@@ -212,7 +247,8 @@ max_attempts=15
 attempt=0
 
 while [ $attempt -lt $max_attempts ]; do
-    if curl -s http://localhost:8000/admin/ > /dev/null 2>&1; then
+    # Usar una petición simple al endpoint raíz en lugar de /admin/
+    if curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/ | grep -q "200\|302\|301" > /dev/null 2>&1; then
         echo "${GREEN}✅ Backend está corriendo y respondiendo${NC}"
         break
     fi

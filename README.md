@@ -2,6 +2,8 @@
 
 Sistema de e-commerce completo desarrollado con Django REST Framework (backend) y Vue.js 3 (frontend) para la venta de servicios de hosting.
 
+> 📖 **¿Primera vez usando el proyecto?** Lee la [Guía de Inicio Rápido](INICIO_RAPIDO.md) para configurarlo en minutos.
+
 ## Características Principales
 
 - 🔐 Autenticación de usuarios con Django + Djoser

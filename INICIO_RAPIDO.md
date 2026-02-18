@@ -132,12 +132,17 @@ Asegúrate de que Docker Desktop esté abierto y en ejecución.
 Algunos servicios ya están usando los puertos necesarios:
 
 ```bash
-# Ver qué está usando el puerto
+# Linux/macOS - Ver qué está usando el puerto
 sudo lsof -i :8000  # Backend
 sudo lsof -i :3000  # Frontend
 sudo lsof -i :5432  # PostgreSQL
 
-# Detener todos los contenedores
+# Windows - Ver qué está usando el puerto
+netstat -ano | findstr :8000  # Backend
+netstat -ano | findstr :3000  # Frontend
+netstat -ano | findstr :5432  # PostgreSQL
+
+# Detener todos los contenedores Docker
 docker compose down
 ```
 
