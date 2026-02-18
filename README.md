@@ -206,6 +206,15 @@ docker compose logs frontend
 docker compose logs db
 ```
 
+### Error de CORS al intentar hacer login
+Si ves errores como "Cross-Origin Request Blocked" al intentar hacer login:
+1. Verifica que el backend esté corriendo en `http://127.0.0.1:8000`
+2. Verifica que el frontend esté corriendo en uno de los puertos configurados (3000, 8080)
+3. El proyecto ya incluye configuración CORS completa en `settings.py`
+4. Para más detalles, consulta [`docs/CORS_FIX.md`](docs/CORS_FIX.md)
+
+**Nota**: Si cambias el puerto del frontend, debes actualizar `CORS_ALLOWED_ORIGINS` en `ecommerce_project/settings.py`.
+
 ## Tecnologías Utilizadas
 
 ### Backend
