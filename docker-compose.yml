@@ -3,16 +3,18 @@ services:
     image: postgres:13
     container_name: ecommerce_db
     restart: always
+    env_file:
+      - .env
     environment:
-      POSTGRES_DB: ecommerce_db
-      POSTGRES_USER: ecommerce_user
-      POSTGRES_PASSWORD: ecommerce_password
+      POSTGRES_DB: ${DB_NAME:-ecommerce_db}
+      POSTGRES_USER: ${DB_USER:-ecommerce_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-ecommerce_password}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ecommerce_user"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-ecommerce_user}"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -21,15 +23,17 @@ services:
     build: .
     container_name: ecommerce_backend
     restart: always
+    env_file:
+      - .env
     environment:
-      DEBUG: 'True'
-      SECRET_KEY: 'your-super-secret-key-here'
-      ALLOWED_HOSTS: 'localhost,127.0.0.1,backend'
-      DB_NAME: ecommerce_db
-      DB_USER: ecommerce_user
-      DB_PASSWORD: ecommerce_password
-      DB_HOST: db
-      DB_PORT: 5432
+      DEBUG: ${DEBUG:-True}
+      SECRET_KEY: ${SECRET_KEY:-your-super-secret-key-here}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1,backend}
+      DB_NAME: ${DB_NAME:-ecommerce_db}
+      DB_USER: ${DB_USER:-ecommerce_user}
+      DB_PASSWORD: ${DB_PASSWORD:-ecommerce_password}
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-5432}
     volumes:
       - ./media:/app/media
       - static_volume:/app/staticfiles
@@ -47,12 +51,14 @@ services:
     build: ./ecommerce_vue
     container_name: ecommerce_frontend
     restart: always
+    env_file:
+      - .env
     ports:
       - "3000:80"
     depends_on:
       - backend
     environment:
-      VUE_APP_API_URL: http://localhost:8000
+      VUE_APP_API_URL: ${VUE_APP_API_URL:-http://localhost:8000}
 
 volumes:
   postgres_data:
