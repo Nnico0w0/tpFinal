@@ -23,9 +23,6 @@
         <div class="navbar-start">
           <router-link to="/" class="navbar-item">Inicio</router-link>
           <router-link to="/services" class="navbar-item">Todos los Servicios</router-link>
-          <router-link to="/all-users" class="navbar-item">Usuarios</router-link>
-          <router-link to="/all-products" class="navbar-item">Productos</router-link>
-          <router-link to="/all-orders" class="navbar-item">Compras</router-link>
         </div>
 
         <div class="navbar-end">
