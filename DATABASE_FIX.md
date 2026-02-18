@@ -57,7 +57,7 @@ curl -X POST http://localhost:8000/api/v1/users/ \
   -d '{
     "username": "testuser",
     "email": "test@example.com",
-    "password": "testpass123"
+    "password": "SecurePass2024!"
   }'
 ```
 
@@ -110,7 +110,7 @@ curl -X POST http://localhost:8000/api/v1/users/ \
   -d '{
     "username": "testuser",
     "email": "test@example.com",
-    "password": "testpass123"
+    "password": "SecurePass2024!"
   }'
 ```
 
@@ -120,7 +120,7 @@ curl -X POST http://localhost:8000/api/v1/token/login/ \
   -H "Content-Type: application/json" \
   -d '{
     "username": "testuser",
-    "password": "testpass123"
+    "password": "SecurePass2024!"
   }'
 ```
 

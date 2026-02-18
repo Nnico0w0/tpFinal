@@ -65,13 +65,13 @@ if [ ! -f .env ]; then
     echo "📝 Creating .env file from .env.example..."
     if [ -f .env.example ]; then
         cp .env.example .env
-        # Set DEBUG=True for development (compatible with both GNU and BSD sed)
-        if sed --version 2>/dev/null | grep -q GNU; then
-            # GNU sed (Linux)
-            sed -i 's/DEBUG=False/DEBUG=True/g' .env
-        else
-            # BSD sed (macOS)
+        # Set DEBUG=True for development (cross-platform compatible)
+        if [ "$(uname)" = "Darwin" ]; then
+            # macOS (BSD sed)
             sed -i '' 's/DEBUG=False/DEBUG=True/g' .env
+        else
+            # Linux (GNU sed)
+            sed -i 's/DEBUG=False/DEBUG=True/g' .env
         fi
         echo "✅ .env file created"
         echo "⚠️  Note: Using default configuration. For production, update .env with your own values."

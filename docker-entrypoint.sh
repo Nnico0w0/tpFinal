@@ -3,12 +3,19 @@
 
 set -e
 
+# Validate required environment variables
+if [ -z "$DB_HOST" ] || [ -z "$DB_PORT" ] || [ -z "$DB_USER" ]; then
+    echo "Error: Required environment variables are not set"
+    echo "Please ensure DB_HOST, DB_PORT, and DB_USER are defined"
+    exit 1
+fi
+
 # Configuration
 MAX_RETRIES=30
 RETRY_COUNT=0
 
 # Wait for database to be ready
-echo "Waiting for database connection..."
+echo "Waiting for database connection at $DB_HOST:$DB_PORT..."
 while ! pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" > /dev/null 2>&1; do
     RETRY_COUNT=$((RETRY_COUNT + 1))
     if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
