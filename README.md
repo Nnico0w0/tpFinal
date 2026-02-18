@@ -2,6 +2,8 @@
 
 Sistema de e-commerce completo desarrollado con Django REST Framework (backend) y Vue.js 3 (frontend) para la venta de servicios de hosting.
 
+> 📖 **¿Primera vez usando el proyecto?** Lee la [Guía de Inicio Rápido](INICIO_RAPIDO.md) para configurarlo en minutos.
+
 ## Características Principales
 
 - 🔐 Autenticación de usuarios con Django + Djoser
@@ -34,21 +36,28 @@ git clone <url-del-repositorio>
 cd tpFinal
 ```
 
-2. **Ejecutar el script de inicio**
+2. **Ejecutar el script de setup (primera vez)**
 ```bash
-./start-project.sh
+chmod +x setup.sh
+./setup.sh
 ```
 
-El script se encargará de:
-- ✅ Verificar que Docker esté disponible
-- ✅ Crear el archivo .env si no existe
+Este script automatiza todo el proceso de configuración inicial:
+- ✅ Verificar que Docker y Docker Compose estén disponibles
+- ✅ Crear el archivo .env automáticamente desde .env.example
+- ✅ Generar SECRET_KEY seguro para Django
+- ✅ Configurar variables de entorno del frontend
 - ✅ Construir las imágenes de los contenedores
 - ✅ Iniciar la base de datos PostgreSQL
 - ✅ Esperar a que la base de datos esté lista
-- ✅ Iniciar el backend Django
-- ✅ Ejecutar las migraciones automáticamente
+- ✅ Iniciar el backend Django con migraciones automáticas
 - ✅ Iniciar el frontend Vue.js
-- ✅ Esperar a que todos los servicios estén listos
+- ✅ Verificar que todos los servicios estén funcionando correctamente
+
+**Alternativa**: Si ya has configurado el proyecto, puedes usar:
+```bash
+./start-project.sh
+```
 
 3. **Acceder a la aplicación**
 
